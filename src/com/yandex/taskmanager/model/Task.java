@@ -1,9 +1,16 @@
+package com.yandex.taskmanager.model;
+
+import com.yandex.taskmanager.sevice.Status;
 
 public class Task {
     private String name;
     private String description;
     private int id;
     private Status status;
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Task(String name, String description, Status status) {
         this.name = name;
@@ -27,21 +34,26 @@ public class Task {
         return description;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        return "Task{" +
+        return "com.yandex.taskmanager.model.Task{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
                 '}';
     }
+
 }

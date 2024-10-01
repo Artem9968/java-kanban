@@ -1,3 +1,11 @@
+package com.yandex;
+
+import com.yandex.taskmanager.model.Epic;
+import com.yandex.taskmanager.model.SubTask;
+import com.yandex.taskmanager.model.Task;
+import com.yandex.taskmanager.sevice.Status;
+import com.yandex.taskmanager.sevice.TaskManager;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -17,30 +25,30 @@ public class Main {
         taskManager.addEpic(learnJava);
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
-        SubTask readTheory = new SubTask("Прочитать теорию", "Написать конспект", Status.DONE);
-        SubTask practicum = new SubTask("Практика", "Написать код", Status.IN_PROGRESS);
+        SubTask readTheory = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE);
+        SubTask practicum = new SubTask(3, "Практика", "Написать код", Status.IN_PROGRESS);
         taskManager.addSubTask(3, readTheory);
         taskManager.addSubTask(3, practicum);
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
-        System.out.println(taskManager.getSubsByEpicId(3));
+        System.out.println(" ** " + taskManager.getSubsByEpicId(3));
         System.out.println("------------------------------");
         Epic checkCode = new Epic("Проверить код", "Проверить все методы классов");
         taskManager.addEpic(checkCode);
         System.out.println(taskManager.getEpicById(6));
         System.out.println("------------------------------");
-        SubTask useDebug = new SubTask("Использовать дебаг", "Пройтись дебагом", Status.DONE);
+        SubTask useDebug = new SubTask(6, "Использовать дебаг", "Пройтись дебагом", Status.DONE);
         taskManager.addSubTask(6, useDebug);
         System.out.println(taskManager.getEpicById(6));
         System.out.println("------------------------------");
         System.out.println(taskManager.getSubsByEpicId(6));
         System.out.println("------------------------------");
-        Task newRun = new Task("Протренироваться", "Выйти на пробежку", Status.DONE);
-        taskManager.updateTask(1, newRun);
-        System.out.println(taskManager.getTasks());
+        taskManager.setTaskStatus(run, Status.DONE);
+        taskManager.updateTask(run);
+        System.out.println(" ** " + taskManager.getTasks());
         System.out.println("------------------------------");
-        SubTask newPracticum = new SubTask("Практика", "Написать код", Status.DONE);
-        taskManager.updateSubTask(5, newPracticum);
+        taskManager.setSubTaskStatus(practicum, Status.DONE);
+        taskManager.updateSubTask(practicum);
         System.out.println(taskManager.getEpicById(3));
         System.out.println("------------------------------");
         System.out.println(taskManager.getSubsByEpicId(3));

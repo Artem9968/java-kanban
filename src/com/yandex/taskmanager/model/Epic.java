@@ -1,29 +1,33 @@
+package com.yandex.taskmanager.model;
+
+import com.yandex.taskmanager.sevice.Status;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<Integer> subTasks;
+    private final ArrayList<Integer> subTasksId;   // сделал поле final
 
     public Epic(String name, String description) {
         super(name, description, Status.NEW);
-        subTasks = new ArrayList<>();
+        subTasksId = new ArrayList<>();
     }
 
     public ArrayList<Integer> getSubTasks() {
-        return subTasks;
+        return subTasksId;
     }
 
     public void setSubTasks(ArrayList<Integer> subtask) {
-        subTasks.addAll(subtask);
+        subTasksId.addAll(subtask);
     }
 
     public void delSubTask(Integer idSubTask) {
-        subTasks.remove(idSubTask);
+        subTasksId.remove(idSubTask);
     }
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "subTasks=" + subTasks +
+        return "com.yandex.taskmanager.model.Epic{" +
+                "subTasks=" + subTasksId +
                 '}' + super.toString();
     }
 }
