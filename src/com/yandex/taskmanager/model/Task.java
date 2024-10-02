@@ -1,7 +1,5 @@
 package com.yandex.taskmanager.model;
 
-import com.yandex.taskmanager.sevice.Status;
-
 public class Task {
     private String name;
     private String description;

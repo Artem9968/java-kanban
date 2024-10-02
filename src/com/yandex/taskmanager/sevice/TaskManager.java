@@ -1,6 +1,7 @@
 package com.yandex.taskmanager.sevice;
 
 import com.yandex.taskmanager.model.Epic;
+import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
 
@@ -13,7 +14,7 @@ public class TaskManager {
     private final HashMap<Integer, Epic> epics = new HashMap<>();    // сделал final
     private final HashMap<Integer, SubTask> subTasks = new HashMap<>();  // сделал final
 
-    private int id = 1;
+    private int id = 0;
 
     public void addTask(Task task) {   // добавить задачу
         task.setId(++id);               // использую префиксный инкремент
@@ -21,16 +22,13 @@ public class TaskManager {
     }
 
     public void addEpic(Epic epic) {            // добавить эпик
-        epic.setId(id);
+        epic.setId(++id);                         // использую префиксный инкремент
         epics.put(epic.getId(), epic);
-        id++;
     }
 
-    public void addSubTask(int epicId, SubTask subtask) {      // добавить подзадачу конкретному эпику по его id
-        subtask.setId(id);
+    public void addSubTask(SubTask subtask) {      // добавить подзадачу конкретному эпику по его id
+        subtask.setId(++id);                                // использую префиксный инкремент
         subTasks.put(subtask.getId(), subtask);
-        id++;
-        // subtask.setEpicId(epicId);
         Epic epic = epics.get(subtask.getEpicId());
         epic.getSubTasks().add(subtask.getId());
         checkStatusEpic(epic);
@@ -57,18 +55,18 @@ public class TaskManager {
     }
 
     public SubTask getSubTaskById(int idSubTask) {    // вернуть подзадачу по ее id
-        return subTasks.get(id);                        // удалил ненужную предварительную проверку
+        return subTasks.get(idSubTask);
     }
 
     public ArrayList<SubTask> getSubsByEpicId(int epicId) {    // вернуть все подзадачи конкретного эпика по id эпика
-        if (epics.containsKey(epicId)) {
+        final Epic epic = epics.get(epicId);                  // реализовал рекомендации
+        if (epic != null) {
             ArrayList<SubTask> subs = new ArrayList<>();
-            Epic epic = epics.get(epicId);                 // реализовал рекомендации
-            for (int i : epic.getSubTasks())
-                subs.add(subTasks.get(i));
+            for (int subTaskId : epic.getSubTasks())
+                subs.add(subTasks.get(subTaskId));
             return subs;
-        } else
-            return null;
+        }
+        return null;
     }
 
     public void updateTask(Task task) {          // обновить задачу
@@ -126,14 +124,6 @@ public class TaskManager {
         }
     }
 
-    public void setTaskStatus(Task task, Status status) {
-        task.setStatus(status);
-    }
-
-    public void setSubTaskStatus(SubTask subTask, Status status) {
-        subTask.setStatus(status);
-    }
-
     private void checkStatusEpic(Epic epic) {     // метод расчета статуса эпика по статусам его подзадач
         int first = 0;
         int done = 0;
@@ -143,7 +133,7 @@ public class TaskManager {
                 case NEW:
                     first++;
                 case IN_PROGRESS:
-                    epic.setStatus(Status.IN_PROGRESS);  // добавил согласно рекомендации
+                    epic.setStatus(Status.IN_PROGRESS);
                     return;
                 case DONE:
                     done++;
@@ -153,5 +143,6 @@ public class TaskManager {
             epic.setStatus(Status.DONE);
         else if (first == epic.getSubTasks().size())
             epic.setStatus(Status.NEW);
+        else epic.setStatus(Status.IN_PROGRESS);      // добавил необходимое условие
     }
 }

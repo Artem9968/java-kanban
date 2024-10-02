@@ -1,9 +1,9 @@
-package com.yandex;
+package com.yandex.taskmanager;
 
 import com.yandex.taskmanager.model.Epic;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
-import com.yandex.taskmanager.sevice.Status;
+import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.sevice.TaskManager;
 
 public class Main {
@@ -27,8 +27,8 @@ public class Main {
         System.out.println("------------------------------");
         SubTask readTheory = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE);
         SubTask practicum = new SubTask(3, "Практика", "Написать код", Status.IN_PROGRESS);
-        taskManager.addSubTask(3, readTheory);
-        taskManager.addSubTask(3, practicum);
+        taskManager.addSubTask(readTheory);
+        taskManager.addSubTask(practicum);
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
         System.out.println(" ** " + taskManager.getSubsByEpicId(3));
@@ -38,16 +38,14 @@ public class Main {
         System.out.println(taskManager.getEpicById(6));
         System.out.println("------------------------------");
         SubTask useDebug = new SubTask(6, "Использовать дебаг", "Пройтись дебагом", Status.DONE);
-        taskManager.addSubTask(6, useDebug);
+        taskManager.addSubTask(useDebug);
         System.out.println(taskManager.getEpicById(6));
         System.out.println("------------------------------");
         System.out.println(taskManager.getSubsByEpicId(6));
         System.out.println("------------------------------");
-        taskManager.setTaskStatus(run, Status.DONE);
         taskManager.updateTask(run);
         System.out.println(" ** " + taskManager.getTasks());
         System.out.println("------------------------------");
-        taskManager.setSubTaskStatus(practicum, Status.DONE);
         taskManager.updateSubTask(practicum);
         System.out.println(taskManager.getEpicById(3));
         System.out.println("------------------------------");

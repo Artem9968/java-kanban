@@ -1,7 +1,5 @@
 package com.yandex.taskmanager.model;
 
-import com.yandex.taskmanager.sevice.Status;
-
 import java.util.ArrayList;
 
 public class Epic extends Task {

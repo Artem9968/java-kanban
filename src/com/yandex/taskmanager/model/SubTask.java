@@ -1,7 +1,5 @@
 package com.yandex.taskmanager.model;
 
-import com.yandex.taskmanager.sevice.Status;
-
 public class SubTask extends Task {
 
     private final int epicId;   // добавил поле final
