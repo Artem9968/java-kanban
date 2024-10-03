@@ -132,11 +132,13 @@ public class TaskManager {
             switch (sub.getStatus()) {
                 case NEW:
                     first++;
+                    break;
                 case IN_PROGRESS:
                     epic.setStatus(Status.IN_PROGRESS);
                     return;
                 case DONE:
                     done++;
+                    break;
             }
         }
         if (done > 0 && done == epic.getSubTasks().size())
