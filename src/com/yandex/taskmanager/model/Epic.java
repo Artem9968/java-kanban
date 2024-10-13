@@ -1,20 +1,21 @@
 package com.yandex.taskmanager.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
-    private final ArrayList<Integer> subTasksId;   // сделал поле final
+    private final List<Integer> subTasksId;   // сделал поле final
 
     public Epic(String name, String description) {
         super(name, description, Status.NEW);
         subTasksId = new ArrayList<>();
     }
 
-    public ArrayList<Integer> getSubTasks() {
+    public List<Integer> getSubTasks() {
         return subTasksId;
     }
 
-    public void setSubTasks(ArrayList<Integer> subtask) {
+    public void addSubTasks(List<Integer> subtask) {
         subTasksId.addAll(subtask);
     }
 

@@ -4,7 +4,7 @@ import com.yandex.taskmanager.model.Epic;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     void addTask(Task task);
@@ -13,11 +13,11 @@ public interface TaskManager {
 
     void addSubTask(SubTask subtask);
 
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
-    ArrayList<SubTask> getSubTasks();
+    List<SubTask> getSubTasks();
 
     Task getTaskById(int idTask);
 
@@ -25,7 +25,7 @@ public interface TaskManager {
 
     SubTask getSubTaskById(int idSubTask);
 
-    ArrayList<SubTask> getSubsByEpicId(int epicId);
+    List<SubTask> getSubsByEpicId(int epicId);
 
     void updateTask(Task task);
 

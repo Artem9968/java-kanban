@@ -1,4 +1,4 @@
-package com.yandex.test;
+package com.yandex.taskmarket.service;
 
 import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.Task;
@@ -9,9 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class MainTest {
+class InMemoryHistoryManagerTest {
 
     TaskManager taskManager = Managers.getDefault();
     HistoryManager historyManager = Managers.getDefaultHistory();

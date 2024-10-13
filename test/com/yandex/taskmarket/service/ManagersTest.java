@@ -1,4 +1,4 @@
-package com.yandex.test;
+package com.yandex.taskmarket.service;
 
 import com.yandex.taskmanager.sevice.Managers;
 import org.junit.jupiter.api.Test;

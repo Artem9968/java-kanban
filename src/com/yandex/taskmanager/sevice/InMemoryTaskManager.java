@@ -7,12 +7,16 @@ import com.yandex.taskmanager.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private final HashMap<Integer, Task> tasks = new HashMap<>();  // сделал final
-    private final HashMap<Integer, Epic> epics = new HashMap<>();    // сделал final
-    private final HashMap<Integer, SubTask> subTasks = new HashMap<>();  // сделал final
+    HistoryManager historyManager = Managers.getDefaultHistory();   // работа с менеджером истории
+
+    private final Map<Integer, Task> tasks = new HashMap<>();  // сделал final
+    private final Map<Integer, Epic> epics = new HashMap<>();    // сделал final
+    private final Map<Integer, SubTask> subTasks = new HashMap<>();  // сделал final
 
     private int id = 0;
 
@@ -38,40 +42,43 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getTasks() {        // заменил на ArrayList
+    public List<Task> getTasks() {
         return new ArrayList<>(tasks.values());     // если что, вернется пустой список (проверил - вроде работает)
     }
 
     @Override
-    public ArrayList<Epic> getEpics() {     // заменил на ArrayList
+    public List<Epic> getEpics() {
         return new ArrayList<>(epics.values());       // если что, вернется пустой список (проверил - вроде работает)
     }
 
     @Override
-    public ArrayList<SubTask> getSubTasks() {     // добавил метод на подзадачи
+    public List<SubTask> getSubTasks() {     // добавил метод на подзадачи
         return new ArrayList<>(subTasks.values());
     }
 
     @Override
     public Task getTaskById(int idTask) {   // вернуть задачу по ее id
-        return tasks.get(idTask);            // удалил ненужную предварительную проверку
+        historyManager.add(tasks.get(idTask));
+        return tasks.get(idTask);
     }
 
     @Override
     public Epic getEpicById(int idEpic) {     // вернуть эпик по его id
-        return epics.get(idEpic);                // удалил ненужную предварительную проверку
+        historyManager.add(epics.get(idEpic));
+        return epics.get(idEpic);
     }
 
     @Override
     public SubTask getSubTaskById(int idSubTask) {    // вернуть подзадачу по ее id
+        historyManager.add(subTasks.get(idSubTask));
         return subTasks.get(idSubTask);
     }
 
     @Override
-    public ArrayList<SubTask> getSubsByEpicId(int epicId) {    // вернуть все подзадачи конкретного эпика по id эпика
+    public List<SubTask> getSubsByEpicId(int epicId) {    // вернуть все подзадачи конкретного эпика по id эпика
         final Epic epic = epics.get(epicId);                  // реализовал рекомендации
         if (epic != null) {
-            ArrayList<SubTask> subs = new ArrayList<>();
+            List<SubTask> subs = new ArrayList<>();
             for (int subTaskId : epic.getSubTasks())
                 subs.add(subTasks.get(subTaskId));
             return subs;

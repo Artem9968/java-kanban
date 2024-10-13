@@ -1,4 +1,4 @@
-package com.yandex.test;
+package com.yandex.taskmarket.model;
 
 import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.Task;

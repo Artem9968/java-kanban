@@ -50,7 +50,7 @@ public class Main {
         taskManager.updateSubTask(practicum);
         System.out.println(taskManager.getEpicById(3));
         System.out.println("------------------------------");
-        System.out.println(taskManager.getSubsByEpicId(3));
+        System.out.println(" ** " + taskManager.getSubsByEpicId(3));
         System.out.println("------------------------------");
 
         historyManager.add(taskManager.getTaskById(1));

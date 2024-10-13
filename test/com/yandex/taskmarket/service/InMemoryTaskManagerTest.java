@@ -1,11 +1,10 @@
-package com.yandex.test;
+package com.yandex.taskmarket.service;
 
 import com.yandex.taskmanager.model.Epic;
 import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
 import com.yandex.taskmanager.sevice.InMemoryTaskManager;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -68,5 +67,21 @@ class InMemoryTaskManagerTest {
         assertNotNull(subTasks, "Задачи не возвращаются.");
         assertEquals(2, subTasks.size(), "Неверное количество задач.");
         assertEquals(readTheory, subTasks.get(0), "Задачи не совпадают.");
+    }
+
+    @Test
+    void checkEpics() {
+        taskManager.addEpic(learnJava);
+        SubTask readTheory = new SubTask(learnJava.getId(), "Прочитать теорию", "Написать конспект", Status.DONE);
+        taskManager.addSubTask(readTheory);
+        SubTask practicum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.DONE);
+        taskManager.addSubTask(practicum);
+
+        assertEquals(practicum.getStatus(), learnJava.getStatus(), "Статусы не совпадают");
+
+        SubTask newPracticum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.IN_PROGRESS);
+        taskManager.updateSubTask(newPracticum);
+
+        assertEquals(practicum.getStatus(), learnJava.getStatus(), "Статусы не совпадают");
     }
 }
