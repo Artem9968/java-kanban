@@ -6,19 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 
  class InMemoryHistoryManager implements HistoryManager {
-     private final static int historySize = 10;   // сделал константой
-     private List<Task> tasks;              // сделал приватным
+     private final static int HISTORY_SIZE = 10;
+     private final List<Task> tasks;
 
      public InMemoryHistoryManager() {
-         tasks = new ArrayList<>(historySize);
+         tasks = new ArrayList<>(HISTORY_SIZE);
      }
 
      @Override
      public void add(Task task) {
-         if (tasks.size() == historySize) {
-             tasks.remove(0);
+         if (task != null) {          // добавил условие
+             if (tasks.size() == HISTORY_SIZE) {
+                 tasks.removeFirst();       // исправил
+             }
+             tasks.add(task);
          }
-         tasks.add(task);
      }
 
      @Override

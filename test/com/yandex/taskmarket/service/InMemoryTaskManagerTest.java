@@ -47,7 +47,7 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(epics, "Задачи не возвращаются.");
         assertEquals(1, epics.size(), "Неверное количество задач.");
-        assertEquals(learnJava, epics.get(0), "Задачи не совпадают.");
+        assertEquals(learnJava, epics.getFirst(), "Задачи не совпадают.");
     }
 
     @Test
@@ -66,7 +66,7 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(subTasks, "Задачи не возвращаются.");
         assertEquals(2, subTasks.size(), "Неверное количество задач.");
-        assertEquals(readTheory, subTasks.get(0), "Задачи не совпадают.");
+        assertEquals(readTheory, subTasks.getFirst(), "Задачи не совпадают.");
     }
 
     @Test

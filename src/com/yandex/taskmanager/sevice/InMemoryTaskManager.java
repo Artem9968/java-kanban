@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    HistoryManager historyManager = Managers.getDefaultHistory();   // работа с менеджером истории
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     private final Map<Integer, Task> tasks = new HashMap<>();  // сделал final
     private final Map<Integer, Epic> epics = new HashMap<>();    // сделал final
@@ -58,20 +58,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int idTask) {   // вернуть задачу по ее id
-        historyManager.add(tasks.get(idTask));
-        return tasks.get(idTask);
+        Task task = tasks.get(idTask);     // ввел переменную, что не обращаться к мапе лишний раз
+        historyManager.add(task);           // проверка в методе add
+        return task;
     }
 
     @Override
     public Epic getEpicById(int idEpic) {     // вернуть эпик по его id
-        historyManager.add(epics.get(idEpic));
-        return epics.get(idEpic);
+        Epic epic = epics.get(idEpic);         // ввел переменную, что не обращаться к мапе лишний раз
+        historyManager.add(epic);                // проверка в методе add
+        return epic;
     }
 
     @Override
     public SubTask getSubTaskById(int idSubTask) {    // вернуть подзадачу по ее id
-        historyManager.add(subTasks.get(idSubTask));
-        return subTasks.get(idSubTask);
+        SubTask subTask = subTasks.get(idSubTask);     // ввел переменную, что не обращаться к мапе лишний раз
+        historyManager.add(subTask);                      // проверка в методе add
+        return subTask;
     }
 
     @Override
