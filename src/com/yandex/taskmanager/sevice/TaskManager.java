@@ -44,4 +44,6 @@ public interface TaskManager {
     void dellAllEpics();
 
     void dellAllSubs();
+
+    List<Task> getHistory();
 }

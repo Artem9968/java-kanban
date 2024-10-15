@@ -153,6 +153,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
     private void checkStatusEpic(Epic epic) {     // метод расчета статуса эпика по статусам его подзадач
         int first = 0;
         int done = 0;

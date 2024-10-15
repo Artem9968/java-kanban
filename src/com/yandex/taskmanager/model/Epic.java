@@ -42,6 +42,6 @@ public class Epic extends Task {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(subTasksId);
+        return super.hashCode() + Objects.hashCode(subTasksId);
     }
 }
