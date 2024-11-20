@@ -53,18 +53,19 @@ public class Main {
         System.out.println(" ** " + taskManager.getSubsByEpicId(3));
         System.out.println("------------------------------");
 
-        historyManager.add(taskManager.getTaskById(1));
+//        historyManager.add(taskManager.getTaskById(1));
         historyManager.add(taskManager.getTaskById(2));
         historyManager.add(taskManager.getSubTaskById(4));
-        historyManager.add(taskManager.getSubTaskById(5));
+//        historyManager.add(taskManager.getSubTaskById(5));
+//        historyManager.add(taskManager.getEpicById(3));
+        historyManager.add(taskManager.getEpicById(6));
+//        historyManager.add(taskManager.getTaskById(1));
+//        historyManager.add(taskManager.getTaskById(2));
+        historyManager.add(taskManager.getSubTaskById(4));
+//        historyManager.add(taskManager.getSubTaskById(5));
         historyManager.add(taskManager.getEpicById(3));
         historyManager.add(taskManager.getEpicById(6));
         historyManager.add(taskManager.getTaskById(1));
-        historyManager.add(taskManager.getTaskById(2));
-        historyManager.add(taskManager.getSubTaskById(4));
-        historyManager.add(taskManager.getSubTaskById(5));
-        historyManager.add(taskManager.getEpicById(3));
-        historyManager.add(taskManager.getEpicById(6));
 
 
         System.out.println("------------------------------");
@@ -87,7 +88,6 @@ public class Main {
         taskManager.dellAllEpics();
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
-        historyManager.add(taskManager.getTaskById(2));
 
     }
 
@@ -115,6 +115,5 @@ public class Main {
             System.out.println(task);
         }
     }
-
 }
 

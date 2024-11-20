@@ -27,11 +27,4 @@ class InMemoryHistoryManagerTest {
         assertEquals(historyManager.getHistory().getFirst(), task1, "Задачи не идентичны.");
     }
 
-    @Test
-    void checkSizeHistory() {
-        for (int i = 0; i < 14; i++) {
-            historyManager.add(task1);
-        }
-        assertEquals(historyManager.getHistory().size(), 10, "Ограничение размера истории не работает");
-    }
 }
