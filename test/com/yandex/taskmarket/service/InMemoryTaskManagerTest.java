@@ -4,7 +4,9 @@ import com.yandex.taskmanager.model.Epic;
 import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
+import com.yandex.taskmanager.sevice.HistoryManager;
 import com.yandex.taskmanager.sevice.InMemoryTaskManager;
+import com.yandex.taskmanager.sevice.Managers;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -12,7 +12,6 @@ class InMemoryHistoryManager implements HistoryManager {
     private final Map<Integer, DoublyLinkedList.Node> tasks;
     private final DoublyLinkedList<Task> doublyLinkedList = new DoublyLinkedList<>();
 
-
     public InMemoryHistoryManager() {
         tasks = new HashMap<>();
     }
@@ -39,7 +38,6 @@ class InMemoryHistoryManager implements HistoryManager {
 
     public static class DoublyLinkedList<T extends Task> {
 
-
         private static class Node<T extends Task> {
             public T data;
             public Node<T> next;
@@ -50,12 +48,11 @@ class InMemoryHistoryManager implements HistoryManager {
                 this.next = next;
                 this.prev = prev;
             }
-
         }
 
         private Node<T> head;
         private Node<T> tail;
-         int size = 0;
+        int size = 0;
 
         public void linkLast(T task) {
 
@@ -67,7 +64,6 @@ class InMemoryHistoryManager implements HistoryManager {
             else
                 head = newNode;
             size++;
-          //  historyTasks.put(task.getId(), newNode);
         }
 
         public List<Task> getTasks() {
@@ -80,24 +76,23 @@ class InMemoryHistoryManager implements HistoryManager {
             return tasks;
         }
 
-        private void removeNode(Node n) {
-            if (n != null && size > 1) {
-                if (n.prev == null && n.next != null) {
-                    head = n.next;
-                } else if (n.next == null && n.prev != null) {
-                    tail = n.prev;
-                } else if (n.next != null && n.prev != null) {
-                    n.prev.next = n.next;
-                    n.next.prev = n.prev;
+        private void removeNode(Node node) {
+            if (node != null && size > 1) {
+                if (node.prev == null && node.next != null) {
+                    head = node.next;
+                } else if (node.next == null && node.prev != null) {
+                    tail = node.prev;
+                } else if (node.next != null && node.prev != null) {
+                    node.prev.next = node.next;
+                    node.next.prev = node.prev;
                 }
                 size--;
             }
-            if (n != null && size == 1 && n.next == null && n.prev == null) {
+            if (node != null && size == 1 && node.next == null && node.prev == null) {
                 head = null;
                 tail = null;
                 size = 0;
             }
         }
-
     }
 }

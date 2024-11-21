@@ -53,16 +53,16 @@ public class Main {
         System.out.println(" ** " + taskManager.getSubsByEpicId(3));
         System.out.println("------------------------------");
 
-//        historyManager.add(taskManager.getTaskById(1));
+        historyManager.add(taskManager.getTaskById(1));
         historyManager.add(taskManager.getTaskById(2));
         historyManager.add(taskManager.getSubTaskById(4));
-//        historyManager.add(taskManager.getSubTaskById(5));
-//        historyManager.add(taskManager.getEpicById(3));
+        historyManager.add(taskManager.getSubTaskById(5));
+        historyManager.add(taskManager.getEpicById(3));
         historyManager.add(taskManager.getEpicById(6));
-//        historyManager.add(taskManager.getTaskById(1));
-//        historyManager.add(taskManager.getTaskById(2));
+        historyManager.add(taskManager.getTaskById(1));
+        historyManager.add(taskManager.getTaskById(2));
         historyManager.add(taskManager.getSubTaskById(4));
-//        historyManager.add(taskManager.getSubTaskById(5));
+        historyManager.add(taskManager.getSubTaskById(5));
         historyManager.add(taskManager.getEpicById(3));
         historyManager.add(taskManager.getEpicById(6));
         historyManager.add(taskManager.getTaskById(1));
@@ -114,6 +114,15 @@ public class Main {
         for (Task task : historyManager.getHistory()) {
             System.out.println(task);
         }
+
+        historyManager.remove(6);
+        historyManager.remove(1);
+
+        System.out.println("История после удаления:");
+        for (Task task : historyManager.getHistory()) {
+            System.out.println(task);
+        }
     }
 }
+
 
