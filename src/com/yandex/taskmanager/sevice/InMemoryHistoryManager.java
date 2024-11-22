@@ -18,9 +18,11 @@ class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (tasks.containsKey(task.getId())) {
-            remove(task.getId());
+        if (task == null) {
+            return;
         }
+        remove(task.getId());
+
         doublyLinkedList.linkLast(task);
         tasks.put(task.getId(), doublyLinkedList.tail);
     }
@@ -36,7 +38,7 @@ class InMemoryHistoryManager implements HistoryManager {
         doublyLinkedList.removeNode(node);
     }
 
-    public static class DoublyLinkedList<T extends Task> {
+    private static class DoublyLinkedList<T extends Task> {
 
         private static class Node<T extends Task> {
             public T data;
@@ -77,21 +79,24 @@ class InMemoryHistoryManager implements HistoryManager {
         }
 
         private void removeNode(Node node) {
-            if (node != null && size > 1) {
-                if (node.prev == null && node.next != null) {
-                    head = node.next;
-                } else if (node.next == null && node.prev != null) {
-                    tail = node.prev;
-                } else if (node.next != null && node.prev != null) {
-                    node.prev.next = node.next;
-                    node.next.prev = node.prev;
+            if (node == null) {
+                return;
+            }
+            if (node != null) {
+                Node nodePrev = node.prev;
+                Node nodeNext = node.next;
+                if (nodePrev == null && nodeNext != null) {
+                    head = nodeNext;
+                } else if (nodeNext == null && nodePrev != null) {
+                    tail = nodePrev;
+                } else if (nodeNext != null && nodePrev != null) {
+                    nodePrev.next = nodeNext;
+                    nodeNext.prev = nodePrev;
+                } else if (nodeNext == null && nodePrev == null) {
+                    head = null;
+                    tail = null;
                 }
                 size--;
-            }
-            if (node != null && size == 1 && node.next == null && node.prev == null) {
-                head = null;
-                tail = null;
-                size = 0;
             }
         }
     }
