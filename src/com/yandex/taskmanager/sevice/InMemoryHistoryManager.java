@@ -2,10 +2,7 @@ package com.yandex.taskmanager.sevice;
 
 import com.yandex.taskmanager.model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class InMemoryHistoryManager implements HistoryManager {
 
@@ -69,7 +66,7 @@ class InMemoryHistoryManager implements HistoryManager {
         }
 
         public List<Task> getTasks() {
-            List tasks = new ArrayList<Task>();
+            List tasks = new LinkedList<>();
             Node linkedTask = head;
             for (int i = 0; i < size; i++) {
                 tasks.add(linkedTask.data);
