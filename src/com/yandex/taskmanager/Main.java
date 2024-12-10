@@ -65,6 +65,7 @@ public class Main {
         historyManager.add(taskManager.getSubTaskById(5));
         historyManager.add(taskManager.getEpicById(3));
         historyManager.add(taskManager.getEpicById(6));
+        historyManager.add(taskManager.getTaskById(1));
 
 
         System.out.println("------------------------------");
@@ -87,7 +88,6 @@ public class Main {
         taskManager.dellAllEpics();
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
-        historyManager.add(taskManager.getTaskById(2));
 
     }
 
@@ -114,7 +114,15 @@ public class Main {
         for (Task task : historyManager.getHistory()) {
             System.out.println(task);
         }
-    }
 
+        historyManager.remove(6);
+        historyManager.remove(1);
+
+        System.out.println("История после удаления:");
+        for (Task task : historyManager.getHistory()) {
+            System.out.println(task);
+        }
+    }
 }
+
 

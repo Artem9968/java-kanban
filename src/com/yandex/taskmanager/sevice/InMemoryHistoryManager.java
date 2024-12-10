@@ -2,29 +2,99 @@ package com.yandex.taskmanager.sevice;
 
 import com.yandex.taskmanager.model.Task;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
- class InMemoryHistoryManager implements HistoryManager {
-     private final static int HISTORY_SIZE = 10;
-     private final List<Task> tasks;
+class InMemoryHistoryManager implements HistoryManager {
 
-     public InMemoryHistoryManager() {
-         tasks = new ArrayList<>(HISTORY_SIZE);
-     }
+    private final Map<Integer, DoublyLinkedList.Node> tasks;
+    private final DoublyLinkedList<Task> doublyLinkedList = new DoublyLinkedList<>();
 
-     @Override
-     public void add(Task task) {
-         if (task != null) {          // добавил условие
-             if (tasks.size() == HISTORY_SIZE) {
-                 tasks.removeFirst();       // исправил
-             }
-             tasks.add(task);
-         }
-     }
+    public InMemoryHistoryManager() {
+        tasks = new HashMap<>();
+    }
 
-     @Override
-     public List<Task> getHistory() {
-         return List.copyOf(tasks);    // передаю копию
-     }
- }
+    @Override
+    public void add(Task task) {
+        if (task == null) {
+            return;
+        }
+        remove(task.getId());
+
+        doublyLinkedList.linkLast(task);
+        tasks.put(task.getId(), doublyLinkedList.tail);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return doublyLinkedList.getTasks();
+    }
+
+    @Override
+    public void remove(int id) {
+        DoublyLinkedList.Node node = tasks.remove(id);
+        doublyLinkedList.removeNode(node);
+    }
+
+    private static class DoublyLinkedList<T extends Task> {
+
+        private static class Node<T extends Task> {
+            public T data;
+            public Node<T> next;
+            public Node<T> prev;
+
+            public Node(Node<T> prev, T data, Node<T> next) {
+                this.data = data;
+                this.next = next;
+                this.prev = prev;
+            }
+        }
+
+        private Node<T> head;
+        private Node<T> tail;
+        int size = 0;
+
+        public void linkLast(T task) {
+
+            final Node<T> newNode = new Node<>(tail, task, null);
+            if (head == null) {
+                head = newNode;
+            } else {
+                tail.next = newNode;
+            }
+            tail = newNode;
+            size++;
+        }
+
+        public List<Task> getTasks() {
+            List tasks = new LinkedList<>();
+            Node linkedTask = head;
+            for (int i = 0; i < size; i++) {
+                tasks.add(linkedTask.data);
+                linkedTask = linkedTask.next;
+            }
+            return tasks;
+        }
+
+        private void removeNode(Node node) {
+            if (node == null) {
+                return;
+            }
+            if (node != null) {
+                Node nodePrev = node.prev;
+                Node nodeNext = node.next;
+                if (nodePrev == null && nodeNext != null) {
+                    head = nodeNext;
+                } else if (nodeNext == null && nodePrev != null) {
+                    tail = nodePrev;
+                } else if (nodeNext != null && nodePrev != null) {
+                    nodePrev.next = nodeNext;
+                    nodeNext.prev = nodePrev;
+                } else if (nodeNext == null && nodePrev == null) {
+                    head = null;
+                    tail = null;
+                }
+                size--;
+            }
+        }
+    }
+}
