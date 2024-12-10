@@ -148,7 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void dellAllEpics() {    // удалить все эпики
-        for (int subId : subTasks.keySet()) {
+        for (int subId : epics.keySet()) {
             historyManager.remove(subId);
         }
         dellAllSubs();

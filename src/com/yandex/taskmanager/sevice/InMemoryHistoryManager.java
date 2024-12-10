@@ -55,13 +55,13 @@ class InMemoryHistoryManager implements HistoryManager {
 
         public void linkLast(T task) {
 
-            final Node<T> oldTail = tail;
-            final Node<T> newNode = new Node<>(oldTail, task, null);
-            tail = newNode;
-            if (oldTail != null)
-                oldTail.next = newNode;
-            else
+            final Node<T> newNode = new Node<>(tail, task, null);
+            if (head == null) {
                 head = newNode;
+            } else {
+                tail.next = newNode;
+            }
+            tail = newNode;
             size++;
         }
 
