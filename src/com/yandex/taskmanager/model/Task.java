@@ -46,6 +46,10 @@ public class Task {
         this.name = name;
     }
 
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
