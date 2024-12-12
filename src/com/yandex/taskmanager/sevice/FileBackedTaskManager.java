@@ -1,10 +1,9 @@
 package com.yandex.taskmanager.sevice;
 
+import com.yandex.taskmanager.exception.ManagerSaveException;
 import com.yandex.taskmanager.model.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
@@ -14,20 +13,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         this.file = file;
     }
 
-
     @Override
     public void addTask(Task task) {
         super.addTask(task);
+        save();
     }
 
     @Override
     public void addEpic(Epic epic) {
         super.addEpic(epic);
+        save();
     }
 
     @Override
     public void addSubTask(SubTask subtask) {
         super.addSubTask(subtask);
+        save();
     }
 
     @Override
@@ -68,71 +69,55 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     @Override
     public void updateTask(Task task) {
         super.updateTask(task);
+        save();
     }
 
     @Override
     public void updateEpic(Epic epic) {
         super.updateEpic(epic);
+        save();
     }
 
     @Override
     public void updateSubTask(SubTask subtask) {
         super.updateSubTask(subtask);
+        save();
     }
 
     @Override
     public void delTaskById(int id) {
         super.delTaskById(id);
+        save();
     }
 
     @Override
     public void delEpicById(int epicId) {
         super.delEpicById(epicId);
+        save();
     }
 
     @Override
     public void delSubTaskById(int idSubtusk) {
         super.delSubTaskById(idSubtusk);
+        save();
     }
 
     @Override
     public void dellAllTasks() {
         super.dellAllTasks();
+        save();
     }
 
     @Override
     public void dellAllEpics() {
         super.dellAllEpics();
+        save();
     }
 
     @Override
     public void dellAllSubs() {
         super.dellAllSubs();
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return super.getHistory();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
+        save();
     }
 
     private void save() {
@@ -144,30 +129,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 writer.write((toString(task)));
                 writer.newLine();
             }
-
             for (Epic epic : super.getEpics()) {
                 writer.write((toString(epic)));
                 writer.newLine();
             }
-
             for (SubTask subTask : super.getSubTasks()) {
                 writer.write((toString(subTask)));
                 writer.newLine();
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка при сохранении данных в файл: " + file.getName(), e);
+            throw new ManagerSaveException("Ошибка во время записи файла: " + file.getName(), e);
         }
     }
-//    private String toString(Task task) {
-//        return String.format("%d,%s,%s,%s,%s,%s",
-//                task.getId(),
-//                task.getType(),
-//                task.getName(),
-//                task.getStatus(),
-//                task.getDescription(),
-//                task instanceof SubTask ? ((SubTask) task).getEpicId() : ""
-//        );
-//    }
 
     public static String toString(Task task) {
         String epicId = "";
@@ -175,59 +148,56 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             SubTask subTask = (SubTask) task;
             epicId = String.valueOf(subTask.getEpicId());
         }
-        return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + "," + epicId;
+        return task.getId() + "," + task.getType() + "," + task.getName() + "," + task.getStatus() + "," +
+                task.getDescription() + "," + epicId;
     }
 
     private static Task fromString(String line) {
         String[] parts = line.split(",");
-        int idNumber = Integer.parseInt(parts[0]);
+        int id = Integer.parseInt(parts[0]);
         String type = parts[1];
         String name = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
-        String epicIdNumber = parts.length > 5 ? parts[5] : "";
-
+        String epicIdNumber = parts.length > 5 ? parts[5] : "";  // использовал тернарный оператор
         Task task = null;
         switch (type) {
             case "TASK":
                 task = new Task(name, description, status);
-                task.setId(idNumber);
+                task.setId(id);
                 break;
             case "EPIC":
                 task = new Epic(name, description);
-                task.setId(idNumber);
+                task.setId(id);
                 break;
             case "SUBTASK":
                 int epicId = Integer.parseInt(epicIdNumber);
-                task = new SubTask(epicId, name, description,  status);
-                task.setId(idNumber);
+                task = new SubTask(epicId, name, description, status);
+                task.setId(id);
                 break;
         }
         return task;
     }
 
     public static FileBackedTaskManager loadFromFile(File file) throws IOException {
-        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-            // Пропускаем заголовок
-            reader.readLine();
+            reader.readLine();      //   пропускаем титул файла
             while ((line = reader.readLine()) != null) {
                 Task task = fromString(line);
                 if (task instanceof Epic) {
-                    manager.addEpic((Epic) task);
+                    fileBackedTaskManager.addEpic((Epic) task);
                 } else if (task instanceof SubTask) {
-                    manager.addSubTask((SubTask) task);
+                    fileBackedTaskManager.addSubTask((SubTask) task);
                 } else {
-                    manager.addTask(task);
+                    fileBackedTaskManager.addTask(task);
                 }
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка при загрузке данных из файла: " + file.getName(), e);
+            throw new ManagerSaveException("Ошибка при чтении файла: " + file.getName(), e);
         }
 
-        return manager;
+        return fileBackedTaskManager;
     }
-
-
 }
