@@ -6,9 +6,12 @@ import com.yandex.taskmanager.model.Task;
 import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.sevice.*;
 
+import java.io.File;
+import java.io.IOException;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         TaskManager taskManager = Managers.getDefault();
         HistoryManager historyManager = Managers.getDefaultHistory();
@@ -89,6 +92,26 @@ public class Main {
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
 
+        System.out.println("-----Работа с файлом------");
+
+        Task run2 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS);
+        Task swim2 = new Task("Поплавать", "Пойти в бассейн", Status.NEW);
+        File file = new File("src/resource/example.csv");
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+        fileBackedTaskManager.addTask(run2);
+        fileBackedTaskManager.addTask(swim2);
+        Epic checkCode2 = new Epic("Проверить код", "Проверить все методы классов");
+        SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE);
+        fileBackedTaskManager.addEpic(checkCode2);
+        fileBackedTaskManager.addSubTask(readTheory2);
+
+        InMemoryTaskManager manager = FileBackedTaskManager.loadFromFile(file);
+        System.out.println(manager.getTasks());
+        System.out.println(manager.getEpics());
+        System.out.println(manager.getSubTasks());
+
+
+        System.out.println("-----Конец работы с файлом------");
     }
 
     public static void printAllTasks(TaskManager taskManager, HistoryManager historyManager) {
