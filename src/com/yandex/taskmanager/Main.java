@@ -104,7 +104,8 @@ public class Main {
         SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE);
         fileBackedTaskManager.addEpic(checkCode2);
         fileBackedTaskManager.addSubTask(readTheory2);
-        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(file);
+
+        InMemoryTaskManager manager = FileBackedTaskManager.loadFromFile(file);
         System.out.println(manager.getTasks());
         System.out.println(manager.getEpics());
         System.out.println(manager.getSubTasks());
@@ -145,8 +146,6 @@ public class Main {
             System.out.println(task);
         }
     }
-
-
 }
 
 

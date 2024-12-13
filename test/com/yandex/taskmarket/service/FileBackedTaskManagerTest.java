@@ -5,6 +5,7 @@ import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
 import com.yandex.taskmanager.sevice.FileBackedTaskManager;
+import com.yandex.taskmanager.sevice.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -32,11 +33,12 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.addEpic(checkCode2);
         fileBackedTaskManager.addSubTask(readTheory2);
 
-        fileBackedTaskManager = FileBackedTaskManager.loadFromFile(tempFile);
+        InMemoryTaskManager manager = FileBackedTaskManager.loadFromFile(tempFile);
 
-        List<Task> tasks = fileBackedTaskManager.getTasks();
-        List<Epic> epics = fileBackedTaskManager.getEpics();
-        List<SubTask> subTasks = fileBackedTaskManager.getSubTasks();
+        List<Task> tasks = manager.getTasks();
+        List<Epic> epics = manager.getEpics();
+        List<SubTask> subTasks = manager.getSubTasks();
+        System.out.println(tasks);
 
         assertEquals("Потренироваться", tasks.getFirst().getName(), "Загрузка из файла не работает");
         assertEquals("IN_PROGRESS", tasks.getFirst().getStatus().name(), "Загрузка из файла не работает");
@@ -69,9 +71,9 @@ class FileBackedTaskManagerTest {
                 if (line.contains("Проверить код")) epicFound = true;
                 if (line.contains("Прочитать теорию")) subtaskFound = true;
             }
-            assertTrue(taskFound,"Файл записался неверно");
-            assertTrue(epicFound,"Файл записался неверно");
-            assertTrue(subtaskFound,"Файл записался неверно");
+            assertTrue(taskFound, "Файл записался неверно");
+            assertTrue(epicFound, "Файл записался неверно");
+            assertTrue(subtaskFound, "Файл записался неверно");
         }
     }
 }

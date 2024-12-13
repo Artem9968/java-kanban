@@ -1,12 +1,16 @@
 package com.yandex.taskmanager.sevice;
 
 import com.yandex.taskmanager.exception.ManagerSaveException;
-import com.yandex.taskmanager.model.*;
+import com.yandex.taskmanager.model.Epic;
+import com.yandex.taskmanager.model.Status;
+import com.yandex.taskmanager.model.SubTask;
+import com.yandex.taskmanager.model.Task;
+import com.yandex.taskmanager.model.TaskType;
 
 import java.io.*;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -169,6 +173,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             case "EPIC":
                 task = new Epic(name, description);
                 task.setId(id);
+                task.setStatus(Status.NEW);
                 break;
             case "SUBTASK":
                 int epicId = Integer.parseInt(epicIdNumber);
@@ -179,25 +184,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return task;
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws IOException {
-        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
+    public static InMemoryTaskManager loadFromFile(File file) throws IOException {
+        InMemoryTaskManager manager = new InMemoryTaskManager();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             reader.readLine();      //   пропускаем титул файла
             while ((line = reader.readLine()) != null) {
                 Task task = fromString(line);
                 if (task instanceof Epic) {
-                    fileBackedTaskManager.addEpic((Epic) task);
+                    manager.addEpic((Epic) task);
                 } else if (task instanceof SubTask) {
-                    fileBackedTaskManager.addSubTask((SubTask) task);
+                    manager.addSubTask((SubTask) task);
                 } else {
-                    fileBackedTaskManager.addTask(task);
+                    manager.addTask(task);
                 }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при чтении файла: " + file.getName(), e);
         }
 
-        return fileBackedTaskManager;
+        return manager;
     }
 }
