@@ -184,25 +184,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return task;
     }
 
-    public static InMemoryTaskManager loadFromFile(File file) throws IOException {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+    public static FileBackedTaskManager loadFromFile(File file) throws IOException {
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             reader.readLine();      //   пропускаем титул файла
             while ((line = reader.readLine()) != null) {
                 Task task = fromString(line);
                 if (task instanceof Epic) {
-                    manager.addEpic((Epic) task);
+                    fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
                 } else if (task instanceof SubTask) {
-                    manager.addSubTask((SubTask) task);
+                    fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
                 } else {
-                    manager.addTask(task);
+                    fileBackedTaskManager.tasks.put(task.getId(), task);
                 }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при чтении файла: " + file.getName(), e);
         }
 
-        return manager;
+        return fileBackedTaskManager;
     }
 }

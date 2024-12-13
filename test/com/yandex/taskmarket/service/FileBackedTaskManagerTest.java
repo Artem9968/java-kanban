@@ -29,7 +29,7 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.addTask(run2);
         fileBackedTaskManager.addTask(swim2);
         Epic checkCode2 = new Epic("Проверить код", "Проверить все методы классов");
-        SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE);
+        SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.NEW);
         fileBackedTaskManager.addEpic(checkCode2);
         fileBackedTaskManager.addSubTask(readTheory2);
 
@@ -43,9 +43,9 @@ class FileBackedTaskManagerTest {
         assertEquals("Потренироваться", tasks.getFirst().getName(), "Загрузка из файла не работает");
         assertEquals("IN_PROGRESS", tasks.getFirst().getStatus().name(), "Загрузка из файла не работает");
         assertEquals("Проверить код", epics.getFirst().getName(), "Загрузка из файла не работает");
-        assertEquals("DONE", epics.getFirst().getStatus().name(), "Загрузка из файла не работает");
+        assertEquals("NEW", epics.getFirst().getStatus().name(), "Загрузка из файла не работает");
         assertEquals("Прочитать теорию", subTasks.getFirst().getName(), "Загрузка из файла не работает");
-        assertEquals("DONE", subTasks.getFirst().getStatus().name(), "Загрузка из файла не работает");
+        assertEquals("NEW", subTasks.getFirst().getStatus().name(), "Загрузка из файла не работает");
     }
 
     @Test
