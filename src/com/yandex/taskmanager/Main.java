@@ -18,14 +18,14 @@ public class Main {
 
         // Ниже оставил необходимый минимум для проверки функциональности кода, который нужен по условию
 
-        Task run = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS);
-        Task swim = new Task("Поплавать", "Пойти в бассейн", Status.NEW);
+        Task run = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 160, "12:00 26.11.2024");
+        Task swim = new Task("Поплавать", "Пойти в бассейн", Status.NEW, 190, "11:00 22.10.2024");
         taskManager.addTask(run);
         taskManager.addTask(swim);
         System.out.println("------------------------------");
         System.out.println(taskManager.getTasks());
         System.out.println("------------------------------");
-        Epic learnJava = new Epic("Освоить Java", "Разобраться в JavaCore");
+        Epic learnJava = new Epic("Освоить Java", "Разобраться в JavaCore", "12:00 26.11.2024");
         taskManager.addEpic(learnJava);
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
