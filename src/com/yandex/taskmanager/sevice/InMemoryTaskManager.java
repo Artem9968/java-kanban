@@ -1,5 +1,6 @@
 package com.yandex.taskmanager.sevice;
 
+import com.yandex.taskmanager.exception.ManagerSaveException;
 import com.yandex.taskmanager.model.Epic;
 import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.SubTask;
@@ -8,10 +9,7 @@ import com.yandex.taskmanager.model.Task;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -21,7 +19,9 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Epic> epics = new HashMap<>();    // сделал final
     protected final Map<Integer, SubTask> subTasks = new HashMap<>();  // сделал final
     protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
-
+    protected final Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
+    protected final Set<Task> priorityTasks = new TreeSet<>(comparator);
+    ;
     private int id = 0;
 
     @Override
@@ -205,7 +205,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     public void changeEpicTime(Epic object) {
         Duration duration = Duration.ZERO;
-        LocalDateTime time = LocalDateTime.parse("01.01.01 00:00", formatter);;
+        LocalDateTime time = LocalDateTime.parse("01.01.01 00:00", formatter);
+        ;
         for (int i : object.getSubTasks()) {
             duration = duration.plus(subTasks.get(i).getDuration());
             LocalDateTime startTime = subTasks.get(i).getStartTime();
@@ -216,4 +217,32 @@ public class InMemoryTaskManager implements TaskManager {
         object.setStartTime(time);
     }
 
+    @Override
+    public void addPriorityTask(Task task) {
+        priorityTasks.add(task);
+        checkIntersectionTask(task);
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return priorityTasks.stream().toList();
+    }
+
+    @Override
+    public void checkIntersectionTask(Task task) {
+        List<Task> tasks = getPrioritizedTasks();
+        tasks.forEach(taskStream -> {
+            if (task.getStartTime() != null && task.getEndTime() != null && taskStream.getStartTime() != null && taskStream.getEndTime() != null && !task.equals(taskStream)) {
+                if (task.getStartTime().equals(taskStream.getStartTime())
+                        || task.getEndTime().equals(taskStream.getEndTime())
+                        || (task.getStartTime().isAfter(taskStream.getStartTime()) && task.getStartTime().isBefore(taskStream.getEndTime()))
+                        || (task.getEndTime().isAfter(taskStream.getStartTime()) && task.getEndTime().isBefore(taskStream.getEndTime()))
+                        || (taskStream.getStartTime().isAfter(task.getStartTime()) && taskStream.getEndTime().isBefore(task.getEndTime()))
+                        || (task.getStartTime().isAfter(taskStream.getStartTime()) && task.getEndTime().isBefore(taskStream.getEndTime()))
+                ) {
+                    throw new ManagerSaveException("Пересечение задач");
+                }
+            }
+        });
+    }
 }
