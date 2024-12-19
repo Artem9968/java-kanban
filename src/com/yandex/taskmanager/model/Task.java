@@ -12,7 +12,6 @@ public class Task {
     private Status status;
     private Duration duration;
     private LocalDateTime startTime;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
     public void setDescription(String description) {
         this.description = description;
@@ -23,6 +22,7 @@ public class Task {
         this.description = description;
         this.status = status;
         this.duration = Duration.ofMinutes(duration);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
         this.startTime = LocalDateTime.parse(startTime, formatter);
     }
 

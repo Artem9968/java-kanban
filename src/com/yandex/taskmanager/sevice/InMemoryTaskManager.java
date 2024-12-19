@@ -5,6 +5,9 @@ import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +20,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Task> tasks = new HashMap<>();  // сделал final
     protected final Map<Integer, Epic> epics = new HashMap<>();    // сделал final
     protected final Map<Integer, SubTask> subTasks = new HashMap<>();  // сделал final
+    protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
     private int id = 0;
 
@@ -39,6 +43,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(subtask.getEpicId());
         epic.getSubTasks().add(subtask.getId());
         checkStatusEpic(epic);
+        changeEpicTime(epic);
     }
 
     @Override
@@ -99,6 +104,7 @@ public class InMemoryTaskManager implements TaskManager {
         final Epic saved = epics.get(epic.getId());   // изменил метод согласно рекомендациям
         saved.setName(epic.getName());
         saved.setDescription(epic.getDescription());
+        changeEpicTime(epic);
     }
 
     @Override
@@ -106,6 +112,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpicId());
         checkStatusEpic(epic);
+        changeEpicTime(epic);
     }
 
     @Override
@@ -135,6 +142,7 @@ public class InMemoryTaskManager implements TaskManager {
             final Epic epic = epics.get(epicId);
             epic.delSubTask(idSubtusk);
             checkStatusEpic(epic);
+            changeEpicTime(epic);
         }
     }
 
@@ -194,4 +202,18 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(Status.NEW);
         else epic.setStatus(Status.IN_PROGRESS);      // добавил необходимое условие
     }
+
+    public void changeEpicTime(Epic object) {
+        Duration duration = Duration.ZERO;
+        LocalDateTime time = LocalDateTime.parse("01.01.01 00:00", formatter);;
+        for (int i : object.getSubTasks()) {
+            duration = duration.plus(subTasks.get(i).getDuration());
+            LocalDateTime startTime = subTasks.get(i).getStartTime();
+            if (time.isEqual(LocalDateTime.parse("01.01.01 00:00", formatter)) || time.isAfter(startTime))
+                time = startTime;
+        }
+        object.setDuration(duration);
+        object.setStartTime(time);
+    }
+
 }

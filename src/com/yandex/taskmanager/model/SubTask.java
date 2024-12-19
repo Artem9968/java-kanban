@@ -6,8 +6,8 @@ public class SubTask extends Task {
 
     private final int epicId;   // добавил поле final
 
-    public SubTask(int id, String name, String description, Status status) {
-        super(name, description, status);
+    public SubTask(int id, String name, String description, Status status, int duration, String startTime) {
+        super(name, description, status, duration, startTime);
         epicId = id;
     }
 

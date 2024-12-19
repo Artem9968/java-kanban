@@ -18,19 +18,19 @@ public class Main {
 
         // Ниже оставил необходимый минимум для проверки функциональности кода, который нужен по условию
 
-        Task run = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 160, "12:00 26.11.2024");
-        Task swim = new Task("Поплавать", "Пойти в бассейн", Status.NEW, 190, "11:00 22.10.2024");
+        Task run = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1600, "01.11.24 12:15");
+        Task swim = new Task("Поплавать", "Пойти в бассейн", Status.NEW, 1900, "01.11.24 12:15");
         taskManager.addTask(run);
         taskManager.addTask(swim);
         System.out.println("------------------------------");
         System.out.println(taskManager.getTasks());
         System.out.println("------------------------------");
-        Epic learnJava = new Epic("Освоить Java", "Разобраться в JavaCore", "12:00 26.11.2024");
+        Epic learnJava = new Epic("Освоить Java", "Разобраться в JavaCore");
         taskManager.addEpic(learnJava);
         System.out.println(taskManager.getEpics());
         System.out.println("------------------------------");
-        SubTask readTheory = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE);
-        SubTask practicum = new SubTask(3, "Практика", "Написать код", Status.IN_PROGRESS);
+        SubTask readTheory = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE, 1600, "01.11.24 12:15");
+        SubTask practicum = new SubTask(3, "Практика", "Написать код", Status.IN_PROGRESS,1600, "01.11.24 12:15");
         taskManager.addSubTask(readTheory);
         taskManager.addSubTask(practicum);
         System.out.println(taskManager.getEpics());
@@ -41,7 +41,7 @@ public class Main {
         taskManager.addEpic(checkCode);
         System.out.println(taskManager.getEpicById(6));
         System.out.println("------------------------------");
-        SubTask useDebug = new SubTask(6, "Использовать дебаг", "Пройтись дебагом", Status.DONE);
+        SubTask useDebug = new SubTask(6, "Использовать дебаг", "Пройтись дебагом", Status.DONE,1600, "01.11.24 12:15");
         taskManager.addSubTask(useDebug);
         System.out.println(taskManager.getEpicById(6));
         System.out.println("------------------------------");
@@ -94,14 +94,14 @@ public class Main {
 
         System.out.println("-----Работа с файлом------");
 
-        Task run2 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS);
-        Task swim2 = new Task("Поплавать", "Пойти в бассейн", Status.NEW);
+        Task run2 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS,1600, "01.11.24 12:15");
+        Task swim2 = new Task("Поплавать", "Пойти в бассейн", Status.NEW,1600, "01.11.24 12:15");
         File file = new File("src/resource/example.csv");
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         fileBackedTaskManager.addTask(run2);
         fileBackedTaskManager.addTask(swim2);
         Epic checkCode2 = new Epic("Проверить код", "Проверить все методы классов");
-        SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE);
+        SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.DONE,1600, "01.11.24 12:15");
         fileBackedTaskManager.addEpic(checkCode2);
         fileBackedTaskManager.addSubTask(readTheory2);
 

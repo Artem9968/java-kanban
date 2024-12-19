@@ -7,8 +7,8 @@ import java.util.Objects;
 public class Epic extends Task {
     private final List<Integer> subTasksId;   // сделал поле final
 
-    public Epic(String name, String description, String startTime) {
-        super(name, description, Status.NEW, 0, startTime);
+    public Epic(String name, String description) {
+        super(name, description, Status.NEW, 0, "01.01.24 00:00");
         subTasksId = new ArrayList<>();
     }
 
