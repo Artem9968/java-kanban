@@ -9,7 +9,14 @@ import com.yandex.taskmanager.model.Task;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -27,6 +34,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void addTask(Task task) {   // добавить задачу
         task.setId(++id);               // использую префиксный инкремент
         tasks.put((task.getId()), task);
+        addPriorityTask(task);
     }
 
     @Override
@@ -41,8 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpicId());
         epic.getSubTasks().add(subtask.getId());
-        checkStatusEpic(epic);
-        changeEpicTime(epic);
+        changeEpic(epic);
     }
 
     @Override
@@ -200,9 +207,10 @@ public class InMemoryTaskManager implements TaskManager {
         else if (first == epic.getSubTasks().size())
             epic.setStatus(Status.NEW);
         else epic.setStatus(Status.IN_PROGRESS);      // добавил необходимое условие
+        changeEpicTime(epic);
     }
 
-    public void changeEpicTime(Epic epic) {
+    private void changeEpicTime(Epic epic) {
         Duration duration = Duration.ZERO;
         LocalDateTime time = LocalDateTime.parse("01.01.01 00:00", formatter);
         for (int i : epic.getSubTasks()) {
@@ -215,8 +223,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStartTime(time);
     }
 
-    @Override
-    public void addPriorityTask(Task task) {
+    protected void addPriorityTask(Task task) {
         priorityTasks.add(task);
         checkIntersectionTask(task);
     }
@@ -226,8 +233,7 @@ public class InMemoryTaskManager implements TaskManager {
         return priorityTasks.stream().toList();
     }
 
-    @Override
-    public void checkIntersectionTask(Task task) {
+    protected void checkIntersectionTask(Task task) {
         List<Task> tasks = getPrioritizedTasks();
         tasks.forEach(taskStream -> {
             if (task.getStartTime() != null && task.getEndTime() != null && taskStream.getStartTime() != null && taskStream.getEndTime() != null && !task.equals(taskStream)) {
@@ -242,5 +248,10 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         });
+    }
+
+    public void changeEpic(Epic epic) {
+        checkStatusEpic(epic);
+        changeEpicTime(epic);
     }
 }

@@ -8,6 +8,8 @@ import com.yandex.taskmanager.model.Task;
 import com.yandex.taskmanager.model.TaskType;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -124,11 +126,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    @Override
-    public void changeEpicTime(Epic epic) {
-        super.changeEpicTime(epic);
-    }
-
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             if (file.length() == 0) {
@@ -169,7 +166,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
         String duration = parts[5];
-        String startTime = parts[6];
+        LocalDateTime startTime = LocalDateTime.parse(parts[6], formatter);
         int intDuration = Integer.parseInt(duration);
         String epicIdNumber = parts.length > 7 ? parts[7] : "";  // использовал тернарный оператор
         Task task = null;
@@ -181,7 +178,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             case "EPIC":
                 task = new Epic(name, description);
                 task.setId(id);
-                task.setStatus(Status.NEW);
+                task.setStatus(status);
+                task.setDuration(Duration.ofMinutes(intDuration));
+                task.setStartTime(startTime);
                 break;
             case "SUBTASK":
                 int epicId = Integer.parseInt(epicIdNumber);
@@ -203,6 +202,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
                 } else if (task instanceof SubTask) {
                     fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
+                    // добавляю сабтаск в эпик
+                    Epic epic = fileBackedTaskManager.epics.get(((SubTask) task).getEpicId());
+                    epic.getSubTasks().add(task.getId());
                 } else {
                     fileBackedTaskManager.tasks.put(task.getId(), task);
                 }

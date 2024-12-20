@@ -8,6 +8,7 @@ import com.yandex.taskmanager.model.Task;
 import com.yandex.taskmanager.sevice.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryTaskManagerTest {
 
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
-    Task run = new Task("Потренироваться", "Выйти на пробежку", Status.DONE, 1400, "01.11.20 12:15");
+    Task run = new Task("Потренироваться", "Выйти на пробежку", Status.DONE, 1400, LocalDateTime.of(2024, 12, 20, 10, 0, 0));
     Epic learnJava = new Epic("Освоить Java", "Разобраться в JavaCore");
-    Task run2 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1400, "01.11.20 12:15");
+    Task run2 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1400, LocalDateTime.of(2024, 12, 20, 10, 0, 0));
 
     @Test
     void addNewTask() {
@@ -54,9 +55,9 @@ class InMemoryTaskManagerTest {
     @Test
     void addNewSubTask() {
         taskManager.addEpic(learnJava);
-        SubTask readTheory = new SubTask(learnJava.getId(), "Прочитать теорию", "Написать конспект", Status.DONE, 1600, "01.11.20 12:15");
+        SubTask readTheory = new SubTask(learnJava.getId(), "Прочитать теорию", "Написать конспект", Status.DONE, 1600, LocalDateTime.of(2022, 12, 20, 10, 0, 0));
         taskManager.addSubTask(readTheory);
-        SubTask practicum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.IN_PROGRESS, 1600, "01.11.20 12:15");
+        SubTask practicum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.IN_PROGRESS, 1600, LocalDateTime.of(2021, 12, 20, 10, 0, 0));
         taskManager.addSubTask(practicum);
         final SubTask savedSubTask = taskManager.getSubTaskById(readTheory.getId());
 
@@ -73,24 +74,24 @@ class InMemoryTaskManagerTest {
     @Test
     void checkEpics() {
         taskManager.addEpic(learnJava);
-        SubTask readTheory = new SubTask(learnJava.getId(), "Прочитать теорию", "Написать конспект", Status.DONE, 1600, "01.11.20 12:15");
+        SubTask readTheory = new SubTask(learnJava.getId(), "Прочитать теорию", "Написать конспект", Status.DONE, 1600, LocalDateTime.of(2020, 12, 20, 10, 0, 0));
         taskManager.addSubTask(readTheory);
-        SubTask practicum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.DONE, 1600, "01.11.20 12:15");
+        SubTask practicum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.DONE, 1600, LocalDateTime.of(2021, 12, 20, 10, 0, 0));
         taskManager.addSubTask(practicum);
 
         assertEquals(practicum.getStatus(), learnJava.getStatus(), "Статусы не совпадают");
 
-        SubTask newPracticum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.IN_PROGRESS, 1600, "01.11.20 12:15");
+        SubTask newPracticum = new SubTask(learnJava.getId(), "Практика", "Написать код", Status.IN_PROGRESS, 1600, LocalDateTime.of(2022, 12, 20, 10, 0, 0));
         taskManager.updateSubTask(newPracticum);
 
         assertEquals(practicum.getStatus(), learnJava.getStatus(), "Статусы не совпадают");
     }
 
-        @Test
+    @Test
     public void shouldIntersectionTask() throws ManagerSaveException {
         Throwable throwable1 = assertThrows(ManagerSaveException.class, () -> {
-            taskManager.addPriorityTask(run);
-            taskManager.addPriorityTask(run2);
+            taskManager.addTask(run);
+            taskManager.addTask(run2);
         });
         assertNotNull(throwable1.getMessage());
     }

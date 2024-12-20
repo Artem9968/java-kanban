@@ -47,9 +47,5 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    void addPriorityTask(Task task);
-
     List<Task> getPrioritizedTasks();
-
-    void checkIntersectionTask(Task task);
 }

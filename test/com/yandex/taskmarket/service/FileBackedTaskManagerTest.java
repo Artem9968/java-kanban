@@ -10,6 +10,7 @@ import com.yandex.taskmanager.sevice.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,13 +25,13 @@ class FileBackedTaskManagerTest {
 
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(tempFile);
 
-        Task run2 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1600, "01.11.20 12:15");
-        Task swim2 = new Task("Поплавать", "Пойти в бассейн", Status.NEW, 1600, "01.11.20 12:15");
+        Task run2 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1600, LocalDateTime.of(2024, 12, 20, 10, 0, 0));
+        Task swim2 = new Task("Поплавать", "Пойти в бассейн", Status.NEW, 1600, LocalDateTime.of(2023, 12, 20, 10, 0, 0));
 
         fileBackedTaskManager.addTask(run2);
         fileBackedTaskManager.addTask(swim2);
         Epic checkCode2 = new Epic("Проверить код", "Проверить все методы классов");
-        SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.NEW, 1600, "01.11.20 12:15");
+        SubTask readTheory2 = new SubTask(3, "Прочитать теорию", "Написать конспект", Status.NEW, 1600, LocalDateTime.of(2022, 12, 20, 10, 0, 0));
         fileBackedTaskManager.addEpic(checkCode2);
         fileBackedTaskManager.addSubTask(readTheory2);
 
@@ -53,10 +54,10 @@ class FileBackedTaskManagerTest {
         File tempFile = File.createTempFile("testFileSave", ".csv");
         tempFile.deleteOnExit(); // чтобы удалить после завершения тестов
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(tempFile);
-        Task run = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1600, "01.11.20 12:15");
+        Task run = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1600, LocalDateTime.of(2021, 12, 20, 10, 0, 0));
 
         Epic checkCode = new Epic("Проверить код", "Проверить все методы классов");
-        SubTask readTheory = new SubTask(2, "Прочитать теорию", "Написать конспект", Status.DONE, 1600, "01.11.20 12:15");
+        SubTask readTheory = new SubTask(2, "Прочитать теорию", "Написать конспект", Status.DONE, 1600, LocalDateTime.of(2020, 12, 20, 10, 0, 0));
         fileBackedTaskManager.addTask(run);
         fileBackedTaskManager.addEpic(checkCode);
         fileBackedTaskManager.addSubTask(readTheory);
