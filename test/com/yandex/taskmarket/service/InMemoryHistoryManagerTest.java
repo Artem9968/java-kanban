@@ -20,8 +20,8 @@ class InMemoryHistoryManagerTest {
     HistoryManager historyManager = Managers.getDefaultHistory();
     TaskManager taskManager = Managers.getDefault();
 
-    Task task1 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS);
-    Task task2 = new Task("Поплавать", "Пойти в бассейн", Status.NEW);
+    Task task1 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS,1600, "01.11.20 12:15");
+    Task task2 = new Task("Поплавать", "Пойти в бассейн", Status.NEW,1600, "01.11.20 12:15");
 
     @Test
     void historyManagerTest() {
@@ -42,8 +42,8 @@ class InMemoryHistoryManagerTest {
     void setHistoryManager2() {
         Epic epic1 = new Epic("Освоить Java", "Разобраться в JavaCore");
         taskManager.addEpic(epic1);
-        SubTask subTask1 = new SubTask(1, "Прочитать теорию", "Написать конспект", Status.DONE);
-        SubTask subTask2 = new SubTask(1, "Практика", "Написать код", Status.IN_PROGRESS);
+        SubTask subTask1 = new SubTask(1, "Прочитать теорию", "Написать конспект", Status.DONE,1600, "01.11.20 12:15");
+        SubTask subTask2 = new SubTask(1, "Практика", "Написать код", Status.IN_PROGRESS,1600, "01.11.20 12:15");
         taskManager.addSubTask(subTask1);
         taskManager.addSubTask(subTask2);
         historyManager.add(epic1);

@@ -16,7 +16,7 @@ class MainTest {
     TaskManager taskManager = Managers.getDefault();
     HistoryManager historyManager = Managers.getDefaultHistory();
 
-    Task task1 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS);
+    Task task1 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS,1600, "01.11.23 12:15");
 
     @Test
     void historyManagerTest() {

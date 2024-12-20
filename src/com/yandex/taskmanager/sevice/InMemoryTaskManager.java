@@ -203,18 +203,17 @@ public class InMemoryTaskManager implements TaskManager {
         else epic.setStatus(Status.IN_PROGRESS);      // добавил необходимое условие
     }
 
-    public void changeEpicTime(Epic object) {
+    public void changeEpicTime(Epic epic) {
         Duration duration = Duration.ZERO;
         LocalDateTime time = LocalDateTime.parse("01.01.01 00:00", formatter);
-        ;
-        for (int i : object.getSubTasks()) {
+        for (int i : epic.getSubTasks()) {
             duration = duration.plus(subTasks.get(i).getDuration());
             LocalDateTime startTime = subTasks.get(i).getStartTime();
             if (time.isEqual(LocalDateTime.parse("01.01.01 00:00", formatter)) || time.isAfter(startTime))
                 time = startTime;
         }
-        object.setDuration(duration);
-        object.setStartTime(time);
+        epic.setDuration(duration);
+        epic.setStartTime(time);
     }
 
     @Override
@@ -240,7 +239,7 @@ public class InMemoryTaskManager implements TaskManager {
                         || (taskStream.getStartTime().isAfter(task.getStartTime()) && taskStream.getEndTime().isBefore(task.getEndTime()))
                         || (task.getStartTime().isAfter(taskStream.getStartTime()) && task.getEndTime().isBefore(taskStream.getEndTime()))
                 ) {
-                    throw new ManagerSaveException("Пересечение задач");
+                    throw new ManagerSaveException(" Произошло пересечение задач");
                 }
             }
         });
