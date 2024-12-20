@@ -21,7 +21,6 @@ public class InMemoryTaskManager implements TaskManager {
     protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
     protected final Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
     protected final Set<Task> priorityTasks = new TreeSet<>(comparator);
-    
     private int id = 0;
 
     @Override
