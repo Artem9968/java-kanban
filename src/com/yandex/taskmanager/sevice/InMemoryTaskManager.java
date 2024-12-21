@@ -1,14 +1,22 @@
 package com.yandex.taskmanager.sevice;
 
+import com.yandex.taskmanager.exception.ManagerSaveException;
 import com.yandex.taskmanager.model.Epic;
 import com.yandex.taskmanager.model.Status;
 import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
 
-import java.util.ArrayList;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -17,13 +25,16 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Task> tasks = new HashMap<>();  // сделал final
     protected final Map<Integer, Epic> epics = new HashMap<>();    // сделал final
     protected final Map<Integer, SubTask> subTasks = new HashMap<>();  // сделал final
-
+    protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
+    protected final Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
+    protected final Set<Task> priorityTasks = new TreeSet<>(comparator);
     private int id = 0;
 
     @Override
     public void addTask(Task task) {   // добавить задачу
         task.setId(++id);               // использую префиксный инкремент
         tasks.put((task.getId()), task);
+        addPriorityTask(task);
     }
 
     @Override
@@ -38,7 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpicId());
         epic.getSubTasks().add(subtask.getId());
-        checkStatusEpic(epic);
+        changeEpic(epic);
     }
 
     @Override
@@ -99,6 +110,7 @@ public class InMemoryTaskManager implements TaskManager {
         final Epic saved = epics.get(epic.getId());   // изменил метод согласно рекомендациям
         saved.setName(epic.getName());
         saved.setDescription(epic.getDescription());
+        changeEpicTime(epic);
     }
 
     @Override
@@ -106,6 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.put(subtask.getId(), subtask);
         Epic epic = epics.get(subtask.getEpicId());
         checkStatusEpic(epic);
+        changeEpicTime(epic);
     }
 
     @Override
@@ -135,6 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
             final Epic epic = epics.get(epicId);
             epic.delSubTask(idSubtusk);
             checkStatusEpic(epic);
+            changeEpicTime(epic);
         }
     }
 
@@ -193,5 +207,51 @@ public class InMemoryTaskManager implements TaskManager {
         else if (first == epic.getSubTasks().size())
             epic.setStatus(Status.NEW);
         else epic.setStatus(Status.IN_PROGRESS);      // добавил необходимое условие
+        changeEpicTime(epic);
+    }
+
+    private void changeEpicTime(Epic epic) {
+        Duration duration = Duration.ZERO;
+        LocalDateTime time = LocalDateTime.parse("01.01.01 00:00", formatter);
+        for (int i : epic.getSubTasks()) {
+            duration = duration.plus(subTasks.get(i).getDuration());
+            LocalDateTime startTime = subTasks.get(i).getStartTime();
+            if (time.isEqual(LocalDateTime.parse("01.01.01 00:00", formatter)) || time.isAfter(startTime))
+                time = startTime;
+        }
+        epic.setDuration(duration);
+        epic.setStartTime(time);
+    }
+
+    protected void addPriorityTask(Task task) {
+        priorityTasks.add(task);
+        checkIntersectionTask(task);
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return priorityTasks.stream().toList();
+    }
+
+    protected void checkIntersectionTask(Task task) {
+        List<Task> tasks = getPrioritizedTasks();
+        tasks.forEach(taskStream -> {
+            if (task.getStartTime() != null && task.getEndTime() != null && taskStream.getStartTime() != null && taskStream.getEndTime() != null && !task.equals(taskStream)) {
+                if (task.getStartTime().equals(taskStream.getStartTime())
+                        || task.getEndTime().equals(taskStream.getEndTime())
+                        || (task.getStartTime().isAfter(taskStream.getStartTime()) && task.getStartTime().isBefore(taskStream.getEndTime()))
+                        || (task.getEndTime().isAfter(taskStream.getStartTime()) && task.getEndTime().isBefore(taskStream.getEndTime()))
+                        || (taskStream.getStartTime().isAfter(task.getStartTime()) && taskStream.getEndTime().isBefore(task.getEndTime()))
+                        || (task.getStartTime().isAfter(taskStream.getStartTime()) && task.getEndTime().isBefore(taskStream.getEndTime()))
+                ) {
+                    throw new ManagerSaveException(" Произошло пересечение задач");
+                }
+            }
+        });
+    }
+
+    public void changeEpic(Epic epic) {
+        checkStatusEpic(epic);
+        changeEpicTime(epic);
     }
 }

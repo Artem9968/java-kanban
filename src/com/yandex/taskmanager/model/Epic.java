@@ -1,5 +1,6 @@
 package com.yandex.taskmanager.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,7 +9,7 @@ public class Epic extends Task {
     private final List<Integer> subTasksId;   // сделал поле final
 
     public Epic(String name, String description) {
-        super(name, description, Status.NEW);
+        super(name, description, Status.NEW, 0, LocalDateTime.now());
         subTasksId = new ArrayList<>();
     }
 

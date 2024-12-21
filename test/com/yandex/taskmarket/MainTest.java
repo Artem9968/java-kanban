@@ -7,6 +7,7 @@ import com.yandex.taskmanager.sevice.Managers;
 import com.yandex.taskmanager.sevice.TaskManager;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ class MainTest {
     TaskManager taskManager = Managers.getDefault();
     HistoryManager historyManager = Managers.getDefaultHistory();
 
-    Task task1 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS);
+    Task task1 = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1600, LocalDateTime.of(2024, 12, 20, 10, 0, 0));
 
     @Test
     void historyManagerTest() {

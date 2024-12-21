@@ -46,4 +46,6 @@ public interface TaskManager {
     void dellAllSubs();
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }

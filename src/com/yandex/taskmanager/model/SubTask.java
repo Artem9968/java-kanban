@@ -1,13 +1,14 @@
 package com.yandex.taskmanager.model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class SubTask extends Task {
 
     private final int epicId;   // добавил поле final
 
-    public SubTask(int id, String name, String description, Status status) {
-        super(name, description, status);
+    public SubTask(int id, String name, String description, Status status, int duration, LocalDateTime startTime) {
+        super(name, description, status, duration, startTime);
         epicId = id;
     }
 

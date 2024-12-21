@@ -1,5 +1,8 @@
 package com.yandex.taskmanager.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -7,15 +10,40 @@ public class Task {
     private String description;
     private int id;
     private Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
+    protected DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, String description, Status status, int duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = Duration.ofMinutes(duration);
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime time) {
+        this.startTime = time;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     public Status getStatus() {
@@ -57,7 +85,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", id=" + id +
                 ", status=" + status +
-                '}';
+                ", duration=" + duration.toMinutes() + ", time=" + startTime.format(formatter) + '}';
     }
 
     @Override
