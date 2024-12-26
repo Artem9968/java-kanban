@@ -5,6 +5,7 @@ import com.yandex.taskmanager.model.SubTask;
 import com.yandex.taskmanager.model.Task;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskManager {
     void addTask(Task task);
@@ -48,4 +49,10 @@ public interface TaskManager {
     List<Task> getHistory();
 
     List<Task> getPrioritizedTasks();
+
+    Map<Integer, Task> getTasksWithId();
+
+    Map<Integer, Epic> getEpicsWithId();
+
+    Map<Integer, SubTask> getSubTasksWithId();
 }
