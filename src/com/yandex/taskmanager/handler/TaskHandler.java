@@ -40,13 +40,13 @@ public class TaskHandler extends BaseHandler implements HttpHandler {
                     if (taskManager.getTasksWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
                         JsonElement jsonElement = JsonParser.parseString(new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
                         JsonObject jsonObject = jsonElement.getAsJsonObject();
-                        taskManager.updateTask(new Task(jsonObject.get("name").getAsString(), jsonObject.get("description").getAsString(), Status.valueOf(jsonObject.get("status").getAsString()), Integer.parseInt(jsonObject.get("duration").getAsString()), LocalDateTime.parse(jsonObject.get("time").getAsString(),formatter)));
+                        taskManager.updateTask(new Task(jsonObject.get("name").getAsString(), jsonObject.get("description").getAsString(), Status.valueOf(jsonObject.get("status").getAsString()), Integer.parseInt(jsonObject.get("duration").getAsString()), LocalDateTime.parse(jsonObject.get("time").getAsString(), formatter)));
                         TaskHandler.sendTextWithNoData(httpExchange);
                     } else TaskHandler.sendNotFound(httpExchange);
                 } else {
                     JsonElement jsonElement = JsonParser.parseString(new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
-                    taskManager.addTask(new Task(jsonObject.get("name").getAsString(), jsonObject.get("description").getAsString(), Status.valueOf(jsonObject.get("status").getAsString()), Integer.parseInt(jsonObject.get("duration").getAsString()), LocalDateTime.parse(jsonObject.get("time").getAsString(),formatter)));
+                    taskManager.addTask(new Task(jsonObject.get("name").getAsString(), jsonObject.get("description").getAsString(), Status.valueOf(jsonObject.get("status").getAsString()), Integer.parseInt(jsonObject.get("duration").getAsString()), LocalDateTime.parse(jsonObject.get("time").getAsString(), formatter)));
                     TaskHandler.sendTextWithNoData(httpExchange);
                 }
                 return;

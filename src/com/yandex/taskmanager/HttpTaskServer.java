@@ -77,32 +77,13 @@ public class HttpTaskServer {
         historyManager.add(taskManager.getEpicById(6));
         historyManager.add(taskManager.getTaskById(1));
 
-
         System.out.println("------------ПРОВЕРКА ПРИОРИТЕТА------------------");
         System.out.println(taskManager.getPrioritizedTasks());
         System.out.println("-----------КОНЕЦ ПРОВЕРКИ ПРИОРИТЕТА-------------------");
 
-
         System.out.println("------------------------------");
         printAllTasks(taskManager, historyManager);
         System.out.println("------------------------------");
-
-//        taskManager.delTaskById(1);
-//        taskManager.delEpicById(3);
-//        System.out.println(taskManager.getTasks());
-//        System.out.println("------------------------------");
-//        System.out.println(taskManager.getEpics());
-//        System.out.println("------------------------------");
-//
-//        taskManager.dellAllTasks();
-//        taskManager.dellAllSubs();
-//        System.out.println(taskManager.getTasks());
-//        System.out.println("------------------------------");
-//        System.out.println(taskManager.getEpics());
-//        System.out.println("------------------------------");
-//        taskManager.dellAllEpics();
-//        System.out.println(taskManager.getEpics());
-//        System.out.println("------------------------------");
 
         System.out.println("-----Работа с файлом------");
 
@@ -137,7 +118,7 @@ public class HttpTaskServer {
 
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
-        //httpServer.stop(1);
+        //httpServer.stop(2);
         System.out.println("-----Конец работы сервера------");
 
     }
