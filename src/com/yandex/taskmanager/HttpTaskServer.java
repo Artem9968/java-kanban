@@ -87,22 +87,22 @@ public class HttpTaskServer {
         printAllTasks(taskManager, historyManager);
         System.out.println("------------------------------");
 
-        taskManager.delTaskById(1);
-        taskManager.delEpicById(3);
-        System.out.println(taskManager.getTasks());
-        System.out.println("------------------------------");
-        System.out.println(taskManager.getEpics());
-        System.out.println("------------------------------");
-
-        taskManager.dellAllTasks();
-        taskManager.dellAllSubs();
-        System.out.println(taskManager.getTasks());
-        System.out.println("------------------------------");
-        System.out.println(taskManager.getEpics());
-        System.out.println("------------------------------");
-        taskManager.dellAllEpics();
-        System.out.println(taskManager.getEpics());
-        System.out.println("------------------------------");
+//        taskManager.delTaskById(1);
+//        taskManager.delEpicById(3);
+//        System.out.println(taskManager.getTasks());
+//        System.out.println("------------------------------");
+//        System.out.println(taskManager.getEpics());
+//        System.out.println("------------------------------");
+//
+//        taskManager.dellAllTasks();
+//        taskManager.dellAllSubs();
+//        System.out.println(taskManager.getTasks());
+//        System.out.println("------------------------------");
+//        System.out.println(taskManager.getEpics());
+//        System.out.println("------------------------------");
+//        taskManager.dellAllEpics();
+//        System.out.println(taskManager.getEpics());
+//        System.out.println("------------------------------");
 
         System.out.println("-----Работа с файлом------");
 

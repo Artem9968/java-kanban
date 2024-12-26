@@ -32,6 +32,7 @@ public class TaskHandler extends BaseHandler implements HttpHandler {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         URI requestURI = httpExchange.getRequestURI();
         String path = requestURI.getPath();
+        System.out.println(path);
         String[] splitStrings = path.split("/");
         switch (method) {
             case "POST": {
