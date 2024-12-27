@@ -254,22 +254,4 @@ public class InMemoryTaskManager implements TaskManager {
         checkStatusEpic(epic);
         changeEpicTime(epic);
     }
-
-    @Override
-    public Map<Integer, Task> getTasksWithId() {
-        if (!tasks.isEmpty()) return tasks;
-        else return new HashMap<>();
-    }
-
-    @Override
-    public Map<Integer, Epic> getEpicsWithId() {
-        if (!epics.isEmpty()) return epics;
-        else return new HashMap<>();
-    }
-
-    @Override
-    public Map<Integer, SubTask> getSubTasksWithId() {
-        if (!subTasks.isEmpty()) return subTasks;
-        else return new HashMap<>();
-    }
 }

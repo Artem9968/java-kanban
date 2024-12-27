@@ -29,12 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HttpTests {
 
-
-    static TaskManager taskManager = new InMemoryTaskManager();
-    static HistoryManager historyManager = Managers.getDefaultHistory();
     static HttpServer httpServer;
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    HttpClient client = HttpClient.newHttpClient();
+    static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    static HttpClient client = HttpClient.newHttpClient();
 
     static {
         try {
@@ -44,13 +41,18 @@ public class HttpTests {
         }
     }
 
+    private static final TaskManager taskManager = new InMemoryTaskManager();
+
     @BeforeAll
     static void start() throws IOException {
-        System.out.println(taskManager.getTasks());
+
+        HistoryManager historyManager = Managers.getDefaultHistory();
+
         Task run = new Task("Потренироваться", "Выйти на пробежку", Status.IN_PROGRESS, 1600, LocalDateTime.of(2024, 12, 20, 10, 0, 0));
         Task swim = new Task("Поплавать", "Пойти в бассейн", Status.NEW, 1900, LocalDateTime.of(2023, 12, 20, 10, 0, 0));
         taskManager.addTask(run);
         taskManager.addTask(swim);
+        System.out.println(taskManager.getTasks());
 
         Epic learnJava = new Epic("Освоить Java", "Разобраться в JavaCore");
         taskManager.addEpic(learnJava);

@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.net.URI;
 
 public class HistoryHandler extends BaseHandler implements HttpHandler {
-    TaskManager taskManager;
-    HistoryManager historyManager;
+    private TaskManager taskManager;
+    private HistoryManager historyManager;
 
     public HistoryHandler(TaskManager taskManager, HistoryManager historyManager) {
         this.taskManager = taskManager;
@@ -26,7 +26,6 @@ public class HistoryHandler extends BaseHandler implements HttpHandler {
         switch (method) {
             case "GET": {
                 if (splitStrings.length == 2) {
-                    //response = gson.toJson(historyManager.getHistory().toString());
                     HistoryHandler.sendText(httpExchange, historyManager.getHistory().toString());
                 }
                 return;

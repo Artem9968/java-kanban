@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class SubHandler extends BaseHandler implements HttpHandler {
-    TaskManager taskManager;
-    HistoryManager historyManager;
+    private TaskManager taskManager;
+    private HistoryManager historyManager;
 
     public SubHandler(TaskManager taskManager, HistoryManager historyManager) {
         this.taskManager = taskManager;
@@ -36,7 +36,7 @@ public class SubHandler extends BaseHandler implements HttpHandler {
         switch (method) {
             case "POST": {
                 if (splitStrings.length == 3) {
-                    if (taskManager.getSubTasksWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                    if (taskManager.getSubTaskById(Integer.parseInt(splitStrings[2])) != null) {
                         JsonElement jsonElement = JsonParser.parseString(new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
                         JsonObject jsonObject = jsonElement.getAsJsonObject();
                         taskManager.updateSubTask(new SubTask(Integer.parseInt(splitStrings[2]), jsonObject.get("name").getAsString(), jsonObject.get("description").getAsString(), Status.valueOf(jsonObject.get("status").getAsString()), Integer.parseInt(jsonObject.get("duration").getAsString()), LocalDateTime.parse(jsonObject.get("time").getAsString(), formatter)));
@@ -52,19 +52,21 @@ public class SubHandler extends BaseHandler implements HttpHandler {
             }
             case "GET": {
                 if (splitStrings.length == 3) {
-                    if (taskManager.getSubTasksWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                    if (taskManager.getSubTaskById(Integer.parseInt(splitStrings[2])) != null) {
                         response = gson.toJson(taskManager.getSubTaskById(Integer.parseInt(splitStrings[2])).toString());
                         TaskHandler.sendText(httpExchange, response);
                     } else TaskHandler.sendNotFound(httpExchange);
                 } else {
-                    TaskHandler.sendText(httpExchange, taskManager.getSubTasksWithId().toString());
+                    TaskHandler.sendText(httpExchange, taskManager.getSubTasks().toString());
                 }
                 return;
             }
             case "DELETE": {
-                if (splitStrings.length == 3 && taskManager.getSubTasksWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                if (splitStrings.length == 3 && taskManager.getSubTaskById(Integer.parseInt(splitStrings[2])) != null) {
                     TaskHandler.sendText(httpExchange, "Задача №" + Integer.parseInt(splitStrings[2]) + " удалена");
                     taskManager.delSubTaskById(Integer.parseInt(splitStrings[2]));
+                } else if (splitStrings[2].equals("all")) {
+                    taskManager.dellAllSubs();
                 } else TaskHandler.sendNotFound(httpExchange);
                 return;
             }

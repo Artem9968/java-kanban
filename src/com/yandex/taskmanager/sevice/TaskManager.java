@@ -49,10 +49,4 @@ public interface TaskManager {
     List<Task> getHistory();
 
     List<Task> getPrioritizedTasks();
-
-    Map<Integer, Task> getTasksWithId();
-
-    Map<Integer, Epic> getEpicsWithId();
-
-    Map<Integer, SubTask> getSubTasksWithId();
 }

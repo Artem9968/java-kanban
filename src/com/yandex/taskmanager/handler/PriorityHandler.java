@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.net.URI;
 
 public class PriorityHandler extends  BaseHandler implements HttpHandler {
-    TaskManager taskManager;
-    HistoryManager historyManager;
+    private TaskManager taskManager;
+    private HistoryManager historyManager;
 
     public PriorityHandler(TaskManager taskManager, HistoryManager historyManager) {
         this.taskManager = taskManager;

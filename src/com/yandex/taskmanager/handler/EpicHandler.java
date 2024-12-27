@@ -12,8 +12,8 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class EpicHandler extends BaseHandler implements HttpHandler {
-    TaskManager taskManager;
-    HistoryManager historyManager;
+    private TaskManager taskManager;
+    private HistoryManager historyManager;
 
     public EpicHandler(TaskManager taskManager, HistoryManager historyManager) {
         this.taskManager = taskManager;
@@ -31,7 +31,7 @@ public class EpicHandler extends BaseHandler implements HttpHandler {
         switch (method) {
             case "POST": {
                 if (splitStrings.length == 3) {
-                    if (taskManager.getEpicsWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                    if (taskManager.getEpicById(Integer.parseInt(splitStrings[2]))!=null) {
                         JsonElement jsonElement = JsonParser.parseString(new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
                         JsonObject jsonObject = jsonElement.getAsJsonObject();
                         taskManager.updateEpic(new Epic(jsonObject.get("name").getAsString(), jsonObject.get("description").getAsString()));
@@ -47,26 +47,28 @@ public class EpicHandler extends BaseHandler implements HttpHandler {
             }
             case "GET": {
                 if (splitStrings.length == 3) {
-                    if (taskManager.getEpicsWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                    if (taskManager.getEpicById(Integer.parseInt(splitStrings[2]))!=null) {
                         response = gson.toJson(taskManager.getEpicById(Integer.parseInt(splitStrings[2])).toString());
                         EpicHandler.sendText(httpExchange, response);
                     } else EpicHandler.sendNotFound(httpExchange);
                     return;
                 } else if (splitStrings.length == 4 && splitStrings[3].equals("subtasks")) {
-                    if (taskManager.getEpicsWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                    if (taskManager.getEpicById(Integer.parseInt(splitStrings[2]))!=null) {
                         response = gson.toJson(taskManager.getSubsByEpicId(Integer.parseInt(splitStrings[2])).toString());
                         EpicHandler.sendText(httpExchange, response);
                     } else EpicHandler.sendNotFound(httpExchange);
                     return;
                 } else {
-                    EpicHandler.sendText(httpExchange, taskManager.getEpicsWithId().toString());
+                    EpicHandler.sendText(httpExchange, taskManager.getEpics().toString());
                     return;
                 }
             }
             case "DELETE": {
-                if (splitStrings.length == 3 && taskManager.getEpicsWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                if (splitStrings.length == 3 && taskManager.getEpicById(Integer.parseInt(splitStrings[2]))!=null) {
                     EpicHandler.sendText(httpExchange, "Задача №" + Integer.parseInt(splitStrings[2]) + " удалена");
                     taskManager.delEpicById(Integer.parseInt(splitStrings[2]));
+                } else if (splitStrings[2].equals("all")) {
+                    taskManager.dellAllEpics();
                 } else EpicHandler.sendNotFound(httpExchange);
                 return;
             }

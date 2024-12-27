@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TaskHandler extends BaseHandler implements HttpHandler {
-    TaskManager taskManager;
-    HistoryManager historyManager;
+    private TaskManager taskManager;
+    private HistoryManager historyManager;
 
     public TaskHandler(TaskManager taskManager, HistoryManager historyManager) {
         this.taskManager = taskManager;
@@ -37,7 +37,7 @@ public class TaskHandler extends BaseHandler implements HttpHandler {
         switch (method) {
             case "POST": {
                 if (splitStrings.length == 3) {
-                    if (taskManager.getTasksWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                    if (taskManager.getTaskById(Integer.parseInt(splitStrings[2])) != null) {
                         JsonElement jsonElement = JsonParser.parseString(new String(httpExchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
                         JsonObject jsonObject = jsonElement.getAsJsonObject();
                         taskManager.updateTask(new Task(jsonObject.get("name").getAsString(), jsonObject.get("description").getAsString(), Status.valueOf(jsonObject.get("status").getAsString()), Integer.parseInt(jsonObject.get("duration").getAsString()), LocalDateTime.parse(jsonObject.get("time").getAsString(), formatter)));
@@ -53,20 +53,21 @@ public class TaskHandler extends BaseHandler implements HttpHandler {
             }
             case "GET": {
                 if (splitStrings.length == 3) {
-                    if (taskManager.getTasksWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                    if (taskManager.getTaskById(Integer.parseInt(splitStrings[2])) != null) {
                         response = gson.toJson(taskManager.getTaskById(Integer.parseInt(splitStrings[2])).toString());
                         TaskHandler.sendText(httpExchange, response);
                     } else TaskHandler.sendNotFound(httpExchange);
                 } else {
-                    //response = gson.toJson(taskManager.getTasks().toString());
-                    TaskHandler.sendText(httpExchange, taskManager.getTasksWithId().toString());
+                    TaskHandler.sendText(httpExchange, taskManager.getTasks().toString());
                 }
                 return;
             }
             case "DELETE": {
-                if (splitStrings.length == 3 && taskManager.getTasksWithId().containsKey(Integer.parseInt(splitStrings[2]))) {
+                if (splitStrings.length == 3 && taskManager.getTaskById(Integer.parseInt(splitStrings[2])) != null) {
                     TaskHandler.sendText(httpExchange, "Задача №" + Integer.parseInt(splitStrings[2]) + " удалена");
                     taskManager.delTaskById(Integer.parseInt(splitStrings[2]));
+                } else if (splitStrings[2].equals("all")) {
+                    taskManager.dellAllTasks();
                 } else TaskHandler.sendNotFound(httpExchange);
                 return;
             }
