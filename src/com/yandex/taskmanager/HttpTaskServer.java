@@ -18,8 +18,8 @@ public class HttpTaskServer {
     private static final int PORT = 8080;
     private static HttpServer httpServer;
 
-    protected static TaskManager taskManager = Managers.getDefault();
-    protected static HistoryManager historyManager = Managers.getDefaultHistory();
+    protected  TaskManager taskManager = Managers.getDefault();
+    protected  HistoryManager historyManager = Managers.getDefaultHistory();
 
     public HttpTaskServer() throws IOException {
 

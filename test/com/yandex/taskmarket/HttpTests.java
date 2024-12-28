@@ -107,7 +107,7 @@ public class HttpTests {
             HttpResponse<String> response5 = client.send(request5, HttpResponse.BodyHandlers.ofString());
             HttpResponse<String> response6 = client.send(request6, HttpResponse.BodyHandlers.ofString());
             assertEquals(200, response1.statusCode());
-            assertTrue(response2.statusCode() == 200);
+            assertTrue(response2.statusCode() == 201);
             assertTrue(response3.statusCode() == 404);
             assertTrue(response4.statusCode() == 201);
             assertTrue(response5.statusCode() == 201);
